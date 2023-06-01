@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: 18177769929088c4aab5c6a10bb4e83f
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - SYN Nova
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 01edbbb2afb831e418b61868763d3b10, type: 3}
+  - {fileID: 12800000, guid: c25f1bcda4a065445863d9a7a35631a4, type: 3}
+  - {fileID: 12800000, guid: d5509911f739aea468c3bd1b1a551e24, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
