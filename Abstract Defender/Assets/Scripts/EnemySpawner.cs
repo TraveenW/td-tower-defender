@@ -101,7 +101,7 @@ public class EnemySpawner : MonoBehaviour
         }
 
         GameObject newEnemy = Instantiate(enemyType, new Vector3(enemyCoOrds[0], enemyCoOrds[1], 0), Quaternion.identity) as GameObject;
-        newEnemy.transform.Rotate(0, 0, spawnAngle + 180f, Space.Self);
+        newEnemy.transform.Rotate(0, 0, spawnAngle + 90f, Space.Self);
         // IMPORTANT: Set enemy health when enemy class is finished
     }
 }
