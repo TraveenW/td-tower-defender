@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Spawn Settings")]
-    [SerializeField] float spawnRateMultiplier = 1f;
+    [SerializeField] float spawnRateMultiplier = 1f; // IMPORTANT: When GUI is finished, make spawnRateMultiplier public
     [SerializeField] float freeplayRampupMultiplier = 0.01f;
     [SerializeField] float spawnRadius = 18;
 
@@ -40,6 +40,7 @@ public class EnemySpawner : MonoBehaviour
         currentWave = new float[WaveArray.waveArray.GetLength(1)];
         UpdateCurrentWave(WaveArray.waveArray, 0);
         gameTimer = GameObject.FindObjectOfType<TimerSystem>();
+        // IMPORTANT: When GUI is finished, change spawnRateMultiplier with difficulty
     }
 
     // Update is called once per frame
@@ -111,6 +112,6 @@ public class EnemySpawner : MonoBehaviour
 
         GameObject newEnemy = Instantiate(enemyType, new Vector3(enemyCoOrds[0], enemyCoOrds[1], 0), Quaternion.identity) as GameObject;
         newEnemy.transform.Rotate(0, 0, spawnAngle + 90f, Space.Self);
-        // IMPORTANT: Set enemy health when enemy class is finished
+        newEnemy.GetComponent<Enemy>().CreateEnemySettings(enemyTypeID, enemyHealth);
     }
 }
