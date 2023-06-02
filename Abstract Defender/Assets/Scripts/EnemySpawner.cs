@@ -4,18 +4,22 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] float spawnMultiplier = 1f;
+    [Header("Spawn Settings")]
+    [SerializeField] float spawnRateMultiplier = 1f;
+    [SerializeField] float freeplayRampupMultiplier = 0.01f;
     [SerializeField] float spawnRadius = 18;
 
-    int waveNumber;
-    int waveStartTime;
-    float spawnCooldown;
-    float[] currentWave;
-    TimerSystem gameTimer;
-
+    [Header("Enemy Types")]
+    [SerializeField] int enemyHealthTypes = 4;
     [SerializeField] GameObject enemyTriangle;
     [SerializeField] GameObject enemySquare;
     [SerializeField] GameObject enemyHexagon;
+
+    int waveNumber;
+    int maxWaveNumber;
+    float spawnCooldown;
+    float[] currentWave;
+    TimerSystem gameTimer;
 
     // Updates currentWave to the new wave
     void UpdateCurrentWave(float[,] newWave, int waveNum)
@@ -31,8 +35,8 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         spawnCooldown = 0;
-        waveStartTime = 0;
         waveNumber = 1;
+        maxWaveNumber = WaveArray.waveArray.GetLength(0);
         currentWave = new float[WaveArray.waveArray.GetLength(1)];
         UpdateCurrentWave(WaveArray.waveArray, 0);
         gameTimer = GameObject.FindObjectOfType<TimerSystem>();
@@ -42,15 +46,20 @@ public class EnemySpawner : MonoBehaviour
     void Update()
     {
         // Updates wave after specified time is reached
-        if (gameTimer.shortElapsedTime >= currentWave[0])
+        if (gameTimer.shortElapsedTime >= currentWave[0] && waveNumber < maxWaveNumber)
         {
-            waveStartTime = (int) currentWave[0];
             UpdateCurrentWave(WaveArray.waveArray, waveNumber);
             waveNumber++;
         }
 
+        // Ramps up spawn rate in the freeplay/endless wave
+        if (waveNumber == maxWaveNumber)
+        {
+            spawnRateMultiplier += Time.deltaTime * freeplayRampupMultiplier;
+        }
+
         // Spawn enemy when spawnCooldown is over
-        if (spawnCooldown >= currentWave[1] * spawnMultiplier)
+        if (spawnCooldown >= currentWave[1] * (1/spawnRateMultiplier))
         {
             SpawnEnemy();
             spawnCooldown = 0;
@@ -80,8 +89,8 @@ public class EnemySpawner : MonoBehaviour
             }
         }
         randomEnemy -= 2;
-        enemyHealth = 1 + (randomEnemy % 4);
-        enemyTypeID = 1 + Mathf.FloorToInt(randomEnemy / 4);
+        enemyHealth = 1 + (randomEnemy % enemyHealthTypes);
+        enemyTypeID = 1 + Mathf.FloorToInt(randomEnemy / enemyHealthTypes);
         enemyCoOrds = CartesianAndPolar.ConvertToCartesian(spawnRadius, spawnAngle);
 
         // Spawn enemy and set attributes
