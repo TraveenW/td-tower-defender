@@ -4882,6 +4882,7 @@ GameObject:
   - component: {fileID: 970681065287413573}
   - component: {fileID: 3983082191156421158}
   - component: {fileID: 3272837283362086115}
+  - component: {fileID: 8421348600739686985}
   m_Layer: 0
   m_Name: Enemy Triangle
   m_TagString: Enemy
@@ -4898,7 +4899,7 @@ Transform:
   m_GameObject: {fileID: 6547840778274154404}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.6452, y: 1.6452, z: 1.6452}
+  m_LocalScale: {x: 1.98, y: 2.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 311868467346960136}
@@ -4999,3 +5000,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyTriangle: {fileID: 0}
   enemySquare: {fileID: 0}
+--- !u!114 &8421348600739686985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6547840778274154404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6891fca80f8036c4796d4309c0ddff13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
