@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    float speed = 24;
+    float speed = 36;
     
     int pierce = 1;
 
@@ -24,5 +24,16 @@ public class Projectile : MonoBehaviour
             gameObject.tag = "Piercing Proj";
         }
         gameObject.GetComponent<DespawnOutOfRange>().despawnRange = wepSettings.shotDistance;
+    }
+
+    // Reduce pierce by 1. If pierce is at 0, remove projectile
+    public void DecreasePierce()
+    {
+        pierce--;
+        GameObject.Find("Hit Display").GetComponent<HitSystem>().IncrementHit();
+        if (pierce <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 }
