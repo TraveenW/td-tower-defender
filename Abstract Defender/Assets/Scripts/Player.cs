@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
         }
 
 
-        if (Input.GetMouseButtonDown(0) && fireRateCounter >= weaponClassList[weaponChoice].firingMultiplier * baseFiringCD)
+        if (Input.GetMouseButton(0) && fireRateCounter >= weaponClassList[weaponChoice].firingMultiplier * baseFiringCD)
         {
             fireRateCounter = 0;
             FireWeapon();
@@ -94,6 +94,6 @@ public class Player : MonoBehaviour
     {
         Quaternion spawnRotation = Quaternion.Euler(0, 0, spawnAngle);
         GameObject newProjectile = Instantiate(projectile, transform.position, spawnRotation) as GameObject;
-        // When projectile class is created, apply the settings here
+        newProjectile.GetComponent<Projectile>().ApplyProjectileSettings(weaponClassList[weaponChoice]);
     }
 }
