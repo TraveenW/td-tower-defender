@@ -10,6 +10,6 @@ public class Weapon : MonoBehaviour
 
     [Header("Multishot")]
     public bool isMultishot;
-    public bool projectileCount;
-    public bool shotArc;
+    public int projectileCount;
+    public float shotArc;
 }

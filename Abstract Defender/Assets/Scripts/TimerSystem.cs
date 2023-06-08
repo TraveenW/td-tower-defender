@@ -7,7 +7,7 @@ using TMPro;
 
 public class TimerSystem : MonoBehaviour
 {
-    public int shortElapsedTime;
+    [HideInInspector] public int shortElapsedTime;
     float elapsedTime;
     
     // Start is called before the first frame update
@@ -15,7 +15,6 @@ public class TimerSystem : MonoBehaviour
     {
         elapsedTime = 0;
         shortElapsedTime = 0;
-        gameObject.GetComponent<TwoLineStatDisplay>().UpdateDisplay(0);
     }
 
     // Update is called once per frame

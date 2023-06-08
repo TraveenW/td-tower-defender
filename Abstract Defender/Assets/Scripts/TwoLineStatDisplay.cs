@@ -17,5 +17,6 @@ public class TwoLineStatDisplay : MonoBehaviour
     private void Start()
     {
         textDisplay = gameObject.GetComponent<TMP_Text>();
+        UpdateDisplay(0);
     }
 }
