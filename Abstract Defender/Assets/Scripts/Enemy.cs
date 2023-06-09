@@ -7,10 +7,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] float kbDuration = 0.15f;
     [SerializeField] float splitArcHalf = 50f;
     [SerializeField] int splitEnemyCount = 2;
-    [SerializeField] GameObject enemyTriangle;
-    [SerializeField] GameObject enemySquare;
+    [SerializeField] GameObject enemySplitup;
 
-    float baseSpeed = 2; // IMPORTANT: When GUI is finished, make baseSpeed public
+    float baseSpeed; 
     float typeSpeedReduction = 0.2f;
     
     float pierceCooldown = 1;
@@ -22,10 +21,37 @@ public class Enemy : MonoBehaviour
 
     float pierceCounter = 0;
 
+    // Update is called once per frame
+    void Update()
+    {
+        gameObject.transform.Translate(new Vector3(0, finalSpeed * Time.deltaTime, 0));
+        if (pierceCounter < pierceCooldown)
+        {
+            pierceCounter += Time.deltaTime;
+        }
+    }
+
+    // Take damage whenever colliding with projectile
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.transform.tag == "Projectile")
+        {
+            other.transform.GetComponent<Projectile>().DecreasePierce();
+            TakeDamage();
+        }
+        else if (other.transform.tag == "Piercing Proj" && pierceCounter >= pierceCooldown)
+        {
+            pierceCounter = 0;
+            other.transform.GetComponent<Projectile>().DecreasePierce();
+            TakeDamage();
+        }
+    }
+
     // When creating enemies, use this function to set their speed and health
     public void CreateEnemySettings(int newID, int newHealth)
     {
         enemyID = newID;
+        baseSpeed = GameObject.Find("Enemy Controller").GetComponent<EnemySpawner>().speedMultiplier * 2;
         finalSpeed = baseSpeed - typeSpeedReduction * (newID - 1);
         finalSpeedStorage = finalSpeed;
         UpdateHealth(newHealth);
@@ -57,31 +83,7 @@ public class Enemy : MonoBehaviour
         }
     }
     
-    // Update is called once per frame
-    void Update()
-    {
-        gameObject.transform.Translate(new Vector3(0, finalSpeed * Time.deltaTime, 0));
-        if (pierceCounter < pierceCooldown)
-        {
-            pierceCounter += Time.deltaTime;
-        }
-    }
-  
-    // Take damage whenever colliding with projectile
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.transform.tag == "Projectile")
-        {
-            other.transform.GetComponent<Projectile>().DecreasePierce();
-            TakeDamage();
-        }
-        else if (other.transform.tag == "Piercing Proj" && pierceCounter >= pierceCooldown)
-        {
-            pierceCounter = 0;
-            other.transform.GetComponent<Projectile>().DecreasePierce();
-            TakeDamage();
-        }
-    }
+    
 
     // Depending on enemy type, either damage enemy normally or split it. If at 1 health, will instead kill enemy
     void TakeDamage()
@@ -110,19 +112,7 @@ public class Enemy : MonoBehaviour
 
         for (int n = 0; n < splitEnemyCount; n++)
         {
-            switch (enemyID - 1)
-            {
-                case 1:
-                    newSplitEnemy = Instantiate(enemyTriangle, transform.position, transform.rotation) as GameObject;
-                    break;
-                case 2:
-                    newSplitEnemy = Instantiate(enemySquare, transform.position, transform.rotation) as GameObject;
-                    break;
-                default:
-                    Debug.Log("ERROR: Cannot access new split enemy type; will spawn Triangle.");
-                    newSplitEnemy = Instantiate(enemyTriangle, transform.position, transform.rotation) as GameObject;
-                    break;
-            }
+            newSplitEnemy = Instantiate(enemySplitup, transform.position, transform.rotation) as GameObject;
             switch (splitArcSide)
             {
                 case 1:

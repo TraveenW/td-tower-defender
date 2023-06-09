@@ -5,7 +5,8 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Spawn Settings")]
-    [SerializeField] float spawnRateMultiplier = 1f; // IMPORTANT: When GUI is finished, make spawnRateMultiplier public
+    public float spawnRateMultiplier = 1f; 
+    public float speedMultiplier = 1f;
     [SerializeField] float freeplayRampupMultiplier = 0.01f;
     [SerializeField] float spawnRadius = 18;
 
@@ -40,7 +41,6 @@ public class EnemySpawner : MonoBehaviour
         currentWave = new float[WaveArray.waveArray.GetLength(1)];
         UpdateCurrentWave(WaveArray.waveArray, 0);
         gameTimer = GameObject.FindObjectOfType<TimerSystem>();
-        // IMPORTANT: When GUI is finished, change spawnRateMultiplier with difficulty
     }
 
     // Update is called once per frame

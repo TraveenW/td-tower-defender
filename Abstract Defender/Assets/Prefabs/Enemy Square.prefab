@@ -4974,8 +4974,7 @@ MonoBehaviour:
   kbDuration: 0.5
   splitArcHalf: 30
   splitEnemyCount: 2
-  enemyTriangle: {fileID: 6547840778274154404, guid: 2b9880487777ade449b7e6c8cd9e1c0b, type: 3}
-  enemySquare: {fileID: 6826319927225067285}
+  enemySplitup: {fileID: 6547840778274154404, guid: 2b9880487777ade449b7e6c8cd9e1c0b, type: 3}
 --- !u!114 &1340511817221351786
 MonoBehaviour:
   m_ObjectHideFlags: 0
