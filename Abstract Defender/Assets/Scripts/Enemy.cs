@@ -45,6 +45,11 @@ public class Enemy : MonoBehaviour
             other.transform.GetComponent<Projectile>().DecreasePierce();
             TakeDamage();
         }
+        else if (other.transform.tag == "Player")
+        {
+            other.transform.GetComponent<Player>().health -= 1;
+            KillEnemy();
+        }
     }
 
     // When creating enemies, use this function to set their speed and health
@@ -83,8 +88,6 @@ public class Enemy : MonoBehaviour
         }
     }
     
-    
-
     // Depending on enemy type, either damage enemy normally or split it. If at 1 health, will instead kill enemy
     void TakeDamage()
     {

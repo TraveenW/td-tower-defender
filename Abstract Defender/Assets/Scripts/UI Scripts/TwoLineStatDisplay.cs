@@ -9,9 +9,9 @@ public class TwoLineStatDisplay : MonoBehaviour
     TMP_Text textDisplay;
 
     // Update the Stat Display text with a whole number
-    public void UpdateDisplay(int wholeNumber)
+    public void UpdateDisplay(int wholeNumber, string separator = ":\n")
     {
-        textDisplay.text = statName + ":\n" + wholeNumber.ToString();
+        textDisplay.text = statName + separator + wholeNumber.ToString();
     }
 
     private void Start()
