@@ -9,12 +9,6 @@ public class DifficultyButton : MonoBehaviour
     [SerializeField] GameObject EnemyController;
     [SerializeField] GameObject GameDisplay;
 
-    // Set button hitbox to be the shape of the image
-    private void Start()
-    {
-        gameObject.GetComponent<Image>().alphaHitTestMinimumThreshold = 0.9f;
-    }
-
     // Turn on Enemy Controller and Game Display elements; and disable Main Menu
     public void StartGame()
     {
