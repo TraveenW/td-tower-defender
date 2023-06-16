@@ -18,6 +18,7 @@ public class UIImageFade : MonoBehaviour
     // Input: The goal alpha amount
     public void FadeImage(float endAlpha)
     {
+        image = gameObject.GetComponent<Image>();
         float startAlpha = image.color.a;
         StartCoroutine(ChangeAlpha(startAlpha, endAlpha));
     }
@@ -26,18 +27,19 @@ public class UIImageFade : MonoBehaviour
     // Input endAlpha: The goal alpha amount
     public void FadeImage(float startAlpha, float endAlpha)
     {
+        image = gameObject.GetComponent<Image>();
         StartCoroutine(ChangeAlpha(startAlpha, endAlpha));
     }
 
     IEnumerator ChangeAlpha(float start, float end)
     {
         float t = 0;
-        while (t < 1.0f)
+        do
         {
             Color newColor = new Color(image.color.r, image.color.g, image.color.b, Mathf.Lerp(start, end, t));
             image.color = newColor;
             t += Time.unscaledDeltaTime / fadeDuration;
             yield return new WaitForSecondsRealtime(Time.unscaledDeltaTime);
-        }
+        } while (t < 1.0f);
     }
 }

@@ -4924,7 +4924,7 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 3
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -5002,8 +5002,7 @@ MonoBehaviour:
   kbDuration: 0.5
   splitArcHalf: 30
   splitEnemyCount: 2
-  enemyTriangle: {fileID: 0}
-  enemySquare: {fileID: 0}
+  enemySplitup: {fileID: 0}
 --- !u!114 &8421348600739686985
 MonoBehaviour:
   m_ObjectHideFlags: 0

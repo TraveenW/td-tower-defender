@@ -44,17 +44,16 @@ public class GameOver : MonoBehaviour
     {
         Time.timeScale = 0;
         yield return new WaitForSecondsRealtime(activateElementDelay);
-
+        sceneTransition.SetActive(true);
         gameOverTransition.GetComponent<UIImageFade>().FadeImage(1);
         timeOutput.GetComponent<TwoLineStatDisplay>().UpdateDisplay(timeInput.GetComponent<TimerSystem>().shortElapsedTime, ": ");
         hitOutput.GetComponent<TwoLineStatDisplay>().UpdateDisplay(hitInput.GetComponent<HitSystem>().hitNumber, ": ");
+
         foreach (TextMeshProUGUI line in textUI)
         {
             yield return new WaitForSecondsRealtime(activateElementDelay);
             line.color = new Color(line.color.r, line.color.g, line.color.b, 1);
         }
-
-        sceneTransition.SetActive(true);
         promptClick = true;
     }
 
