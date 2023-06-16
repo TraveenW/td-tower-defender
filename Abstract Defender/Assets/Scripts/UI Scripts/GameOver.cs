@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
+using TMPro;
 
 public class GameOver : MonoBehaviour
 {
     [SerializeField] float activateElementDelay = 1;
+    [SerializeField] GameObject gameOverTransition;
     [SerializeField] GameObject sceneTransition;
 
     [Header("Time Counter")]
@@ -16,39 +17,44 @@ public class GameOver : MonoBehaviour
     [SerializeField] GameObject hitInput;
     [SerializeField] GameObject hitOutput;
 
-    List<Transform> UIChildren;
+    [Header("Other UI Elements")]
+    [SerializeField] GameObject gameOverText;
+    [SerializeField] GameObject restartPrompt;
+
+    GameObject[] textUIChildren;
+    List<TextMeshProUGUI> textUI;
     bool promptClick = false;
 
     // Start is called before the first frame update
     void Start()
     {
         promptClick = false;
-        timeOutput.GetComponent<TwoLineStatDisplay>().UpdateDisplay(timeInput.GetComponent<TimerSystem>().shortElapsedTime, ": ");
-        hitOutput.GetComponent<TwoLineStatDisplay>().UpdateDisplay(timeInput.GetComponent<HitSystem>().hitNumber, ": ");
+        textUI = new List<TextMeshProUGUI>();
 
-        Time.timeScale = 0;
-        foreach (Transform child in gameObject.transform)
+        textUIChildren = new GameObject[] { gameOverText, timeOutput, hitOutput, restartPrompt };
+        foreach (GameObject u in textUIChildren)
         {
-            if (child.tag == "Fade")
-            {
-                child.GetComponent<UISpriteFade>().FadeSprite(0, 1);
-            }
-            else
-            {
-                UIChildren.Add(child);
-                child.gameObject.SetActive(false);
-            }
+            textUI.Add(u.GetComponent<TextMeshProUGUI>());
         }
+
         StartCoroutine(ExecuteGameOver());
     }
 
     IEnumerator ExecuteGameOver()
     {
-        foreach (Transform child in UIChildren)
+        Time.timeScale = 0;
+        yield return new WaitForSecondsRealtime(activateElementDelay);
+
+        gameOverTransition.GetComponent<UIImageFade>().FadeImage(1);
+        timeOutput.GetComponent<TwoLineStatDisplay>().UpdateDisplay(timeInput.GetComponent<TimerSystem>().shortElapsedTime, ": ");
+        hitOutput.GetComponent<TwoLineStatDisplay>().UpdateDisplay(hitInput.GetComponent<HitSystem>().hitNumber, ": ");
+        foreach (TextMeshProUGUI line in textUI)
         {
             yield return new WaitForSecondsRealtime(activateElementDelay);
-            child.gameObject.SetActive(true);
+            line.color = new Color(line.color.r, line.color.g, line.color.b, 1);
         }
+
+        sceneTransition.SetActive(true);
         promptClick = true;
     }
 
@@ -57,7 +63,6 @@ public class GameOver : MonoBehaviour
         if ((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && promptClick == true)
         {
             promptClick = false;
-            sceneTransition.SetActive(true);
             sceneTransition.GetComponent<SceneTransition>().ReloadScene();
         }
     }

@@ -47,7 +47,7 @@ public class Enemy : MonoBehaviour
         }
         else if (other.transform.tag == "Player")
         {
-            other.transform.GetComponent<Player>().health -= 1;
+            other.transform.GetComponent<Player>().ReduceHealth();
             KillEnemy();
         }
     }

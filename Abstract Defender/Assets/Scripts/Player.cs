@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public int health = 1;
+    [SerializeField] float hitTimer = 1;
     [SerializeField] float baseFiringCD = 0.35f;
     [SerializeField] float weaponSwapCD = 0.1f;
 
@@ -22,6 +23,7 @@ public class Player : MonoBehaviour
     int weaponChoice;
     float fireRateCounter;
     bool hasDied;
+    float hitCounter;
     GameObject[] weaponObjectList;
     Weapon[] weaponClassList;
     Vector3 mousePos;
@@ -32,6 +34,7 @@ public class Player : MonoBehaviour
         weaponChoice = 0;
         fireRateCounter = 0;
         hasDied = false;
+        hitCounter = 0;
         weaponObjectList = new GameObject[] { shortbow, crossbow, launcher };
         weaponClassList = new Weapon[] { shortbow.GetComponent<Weapon>(), crossbow.GetComponent<Weapon>(), launcher.GetComponent<Weapon>() }; 
         
@@ -52,6 +55,10 @@ public class Player : MonoBehaviour
         {
             fireRateCounter += Time.deltaTime;
         }
+        if (hitCounter < hitTimer)
+        {
+            hitCounter += Time.deltaTime;
+        }
 
         // Implementing controls
         if (Input.GetMouseButton(0) && fireRateCounter >= weaponClassList[weaponChoice].firingMultiplier * baseFiringCD)
@@ -63,13 +70,6 @@ public class Player : MonoBehaviour
         {
             fireRateCounter = 0;
             SwitchWeapon(weaponChoice + 1);
-        }
-
-        // Activate Game Over object(s) if at 0 or less health
-        if (health <= 0 && hasDied == false)
-        {
-            hasDied = true;
-            gameOver.SetActive(true);
         }
     }
 
@@ -108,5 +108,20 @@ public class Player : MonoBehaviour
         Quaternion spawnRotation = Quaternion.Euler(0, 0, spawnAngle);
         GameObject newProjectile = Instantiate(projectile, transform.position, spawnRotation) as GameObject;
         newProjectile.GetComponent<Projectile>().ApplyProjectileSettings(weaponClassList[weaponChoice]);
+    }
+
+    // Reduce health by 1 and reset hit timer. If health at 0, activate game over object
+    public void ReduceHealth()
+    {
+        if (hitCounter >= hitTimer)
+        {
+            health--;
+            if (health <= 0 && hasDied == false)
+            {
+                hasDied = true;
+                gameOver.SetActive(true);
+            }
+        }
+        
     }
 }

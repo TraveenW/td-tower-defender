@@ -11,7 +11,7 @@ public class UISpriteFade : MonoBehaviour
 
     private void Start()
     {
-        sprite = GetComponent<SpriteRenderer>();
+        sprite = gameObject.GetComponent<SpriteRenderer>();
     }
 
     // Called by other scripts to fade sprite to a new alpha value
