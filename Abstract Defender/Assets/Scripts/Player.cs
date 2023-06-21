@@ -74,7 +74,7 @@ public class Player : MonoBehaviour
     }
 
     // Change weapons to next one in weaponClassList 
-    // Input: Index of new weapon in weaponClassList
+    // Input: Index of new weapon in list
     void SwitchWeapon(int newWeapon)
     {
         weaponObjectList[weaponChoice].SetActive(false);

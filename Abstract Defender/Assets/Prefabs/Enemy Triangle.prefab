@@ -4999,7 +4999,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 342f529ae7c225644904f38f14babbd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kbDuration: 0.5
+  enemyID: 0
+  kbDuration: 0.15
+  kbMultiplier: 15
   splitArcHalf: 30
   splitEnemyCount: 2
   enemySplitup: {fileID: 0}

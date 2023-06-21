@@ -31,6 +31,8 @@ public class UIImageFade : MonoBehaviour
         StartCoroutine(ChangeAlpha(startAlpha, endAlpha));
     }
 
+
+    // Fade UI element over unscaled time
     IEnumerator ChangeAlpha(float start, float end)
     {
         float t = 0;

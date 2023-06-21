@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] float kbDuration = 0.15f;
+    [SerializeField] int enemyID = 0;
+    [SerializeField] float kbDuration = 0.02f;
+    [SerializeField] float kbMultiplier = 5;
     [SerializeField] float splitArcHalf = 50f;
     [SerializeField] int splitEnemyCount = 2;
     [SerializeField] GameObject enemySplitup;
@@ -14,23 +16,54 @@ public class Enemy : MonoBehaviour
     
     float pierceCooldown = 1;
     
-    int enemyID = 1;
     int health = 1;
     float finalSpeed = 2;
     float finalSpeedStorage;
 
     float pierceCounter = 0;
+    float hitCounter = 0;
 
     // When creating enemies, use this function to set their speed and health
     // Input newID: The enemy's ID/type number
     // Input newHealth: The enemy's health
-    public void CreateEnemySettings(int newID, int newHealth)
+    public void CreateEnemySettings(int newHealth)
     {
-        enemyID = newID;
         baseSpeed = GameObject.Find("Enemy Controller").GetComponent<EnemySpawner>().speedMultiplier * 2;
-        finalSpeed = baseSpeed - typeSpeedReduction * newID;
+        finalSpeed = baseSpeed - typeSpeedReduction * enemyID;
         finalSpeedStorage = finalSpeed;
         UpdateHealth(newHealth);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        gameObject.transform.Translate(new Vector3(0, finalSpeed * Time.deltaTime, 0));
+        pierceCounter += Time.deltaTime;
+        hitCounter += Time.deltaTime;
+    }
+
+    // Take damage whenever colliding with projectile. If piercing, also reset the pierce immunity.
+    // If collision with player instead, rreduce player's health and kill enemy
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.transform.tag == "Projectile" && hitCounter > kbDuration)
+        {
+            hitCounter = 0;
+            other.transform.GetComponent<Projectile>().DecreasePierce();
+            TakeDamage();
+        }
+        else if (other.transform.tag == "Piercing Proj" && pierceCounter >= pierceCooldown && hitCounter > kbDuration)
+        {
+            pierceCounter = 0;
+            hitCounter = 0;
+            other.transform.GetComponent<Projectile>().DecreasePierce();
+            TakeDamage();
+        }
+        else if (other.transform.tag == "Player")
+        {
+            other.transform.GetComponent<Player>().ReduceHealth();
+            KillEnemy();
+        }
     }
 
     // Changes the sprite color according to health
@@ -69,7 +102,7 @@ public class Enemy : MonoBehaviour
         else if (enemyID == 0 && health > 1)
         {
             UpdateHealth(health - 1);
-            StartCoroutine(Knockback());
+            StartCoroutine(Knockback(kbDuration, kbMultiplier));
         }
         else if (health <= 1)
         {
@@ -102,33 +135,32 @@ public class Enemy : MonoBehaviour
             newSplitEnemy.transform.Rotate(0, 0, randomAngle);
 
             // Apply attributes
-            newSplitEnemy.GetComponent<Enemy>().CreateEnemySettings(enemyID - 1, health - 1);
-            newSplitEnemy.GetComponent<Enemy>().SplitEnemyKnockback();
+            newSplitEnemy.GetComponent<Enemy>().CreateEnemySettings(health - 1);
+            newSplitEnemy.GetComponent<Enemy>().SplitEnemyKnockback(kbDuration);
         }
         StartCoroutine(KillEnemy());
     }
 
     // Starts Knockback coroutine. Only here so that coroutine can be executed on new enemy
-    public void SplitEnemyKnockback()
+    public void SplitEnemyKnockback(float splitKBDuration)
     {
-        StartCoroutine(Knockback());
+        StartCoroutine(Knockback(splitKBDuration, kbMultiplier));
     }
 
+
     // Send enemy backwards for kbDuration seconds, and then reorient towards the center
-    IEnumerator Knockback()
+    IEnumerator Knockback(float duration, float speedMultiplier)
     {
         float[] newPolarCoOrds;
-        float kbSpeedMultiplier = 1 + 1 / (kbDuration / 2);
 
-        finalSpeed -= finalSpeedStorage * kbSpeedMultiplier;
-        for (float k = 0; k <= kbDuration; k += Time.deltaTime * kbSpeedMultiplier)
-        {
-            transform.Translate(new Vector3(0, finalSpeed * Time.deltaTime * kbSpeedMultiplier, 0));
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
+        // Reverse finalSpeed and multiply its magnitude
+        finalSpeed -= speedMultiplier * finalSpeedStorage;
+        yield return new WaitForSeconds(duration);
+
+        // Reorient enemy and reset finalSpeed
         newPolarCoOrds = CartesianAndPolar.ConvertToPolar(transform.position.x, transform.position.y);
         transform.eulerAngles = new Vector3(0, 0, newPolarCoOrds[1] + 90f);
-        finalSpeed += finalSpeedStorage * kbSpeedMultiplier;
+        finalSpeed = finalSpeedStorage;
         yield return null;
     }
 
@@ -146,38 +178,5 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(deathParticle.main.duration);
         Destroy(gameObject);
         yield return null;
-    }
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        gameObject.transform.Translate(new Vector3(0, finalSpeed * Time.deltaTime, 0));
-        if (pierceCounter < pierceCooldown)
-        {
-            pierceCounter += Time.deltaTime;
-        }
-    }
-
-    // Take damage whenever colliding with projectile. If piercing, also reset the pierce immunity.
-    // If collision with player instead, rreduce player's health and kill enemy
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.transform.tag == "Projectile")
-        {
-            other.transform.GetComponent<Projectile>().DecreasePierce();
-            TakeDamage();
-        }
-        else if (other.transform.tag == "Piercing Proj" && pierceCounter >= pierceCooldown)
-        {
-            pierceCounter = 0;
-            other.transform.GetComponent<Projectile>().DecreasePierce();
-            TakeDamage();
-        }
-        else if (other.transform.tag == "Player")
-        {
-            other.transform.GetComponent<Player>().ReduceHealth();
-            KillEnemy();
-        }
     }
 }

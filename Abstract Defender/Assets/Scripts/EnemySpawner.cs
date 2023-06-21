@@ -100,6 +100,6 @@ public class EnemySpawner : MonoBehaviour
         // Spawn enemy and apply attributes
         GameObject newEnemy = Instantiate(enemyType, new Vector3(enemyCoOrds[0], enemyCoOrds[1], 0), Quaternion.identity) as GameObject;
         newEnemy.transform.Rotate(0, 0, spawnAngle + 90f, Space.Self);
-        newEnemy.GetComponent<Enemy>().CreateEnemySettings(enemyTypeID, enemyHealth);
+        newEnemy.GetComponent<Enemy>().CreateEnemySettings(enemyHealth);
     }
 }
