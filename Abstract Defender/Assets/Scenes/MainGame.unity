@@ -2371,7 +2371,7 @@ GameObject:
   - component: {fileID: 700733466}
   - component: {fileID: 700733465}
   m_Layer: 0
-  m_Name: Player Controller
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2497,9 +2497,10 @@ MonoBehaviour:
   hitTimer: 1
   baseFiringCD: 0.2
   weaponSwapCD: 0.1
-  shortbow: {fileID: 432649816}
-  crossbow: {fileID: 1781110561}
-  launcher: {fileID: 1095034692}
+  weapons:
+  - {fileID: 3178150055063102538, guid: d560fd0b569d75e44b2a6f3075fa24ca, type: 3}
+  - {fileID: 801719912522615117, guid: 36687343bc0e48349b6a0e0785552f8d, type: 3}
+  - {fileID: 6822517954439498635, guid: 586eaef7ac1547847a93df6402c8b7db, type: 3}
   projectile: {fileID: 6442159227910233417, guid: cc5b1438719c70942bce299327d046d9, type: 3}
   gameOver: {fileID: 668785747}
 --- !u!58 &709227861
