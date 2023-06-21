@@ -3002,9 +3002,10 @@ MonoBehaviour:
   freeplayRampupMultiplier: 0.01
   spawnRadius: 34
   enemyHealthTypes: 4
-  enemyTriangle: {fileID: 6547840778274154404, guid: 2b9880487777ade449b7e6c8cd9e1c0b, type: 3}
-  enemySquare: {fileID: 6826319927225067285, guid: 3cf4f3cf5403d0048b89caef02a2ec75, type: 3}
-  enemyHexagon: {fileID: 505836493580857438, guid: cb6f03c52ff7bf446895d2dce77edff3, type: 3}
+  enemyList:
+  - {fileID: 6547840778274154404, guid: 2b9880487777ade449b7e6c8cd9e1c0b, type: 3}
+  - {fileID: 6826319927225067285, guid: 3cf4f3cf5403d0048b89caef02a2ec75, type: 3}
+  - {fileID: 505836493580857438, guid: cb6f03c52ff7bf446895d2dce77edff3, type: 3}
 --- !u!1 &959142929
 GameObject:
   m_ObjectHideFlags: 0

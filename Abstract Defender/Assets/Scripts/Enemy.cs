@@ -21,43 +21,14 @@ public class Enemy : MonoBehaviour
 
     float pierceCounter = 0;
 
-    // Update is called once per frame
-    void Update()
-    {
-        gameObject.transform.Translate(new Vector3(0, finalSpeed * Time.deltaTime, 0));
-        if (pierceCounter < pierceCooldown)
-        {
-            pierceCounter += Time.deltaTime;
-        }
-    }
-
-    // Take damage whenever colliding with projectile
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.transform.tag == "Projectile")
-        {
-            other.transform.GetComponent<Projectile>().DecreasePierce();
-            TakeDamage();
-        }
-        else if (other.transform.tag == "Piercing Proj" && pierceCounter >= pierceCooldown)
-        {
-            pierceCounter = 0;
-            other.transform.GetComponent<Projectile>().DecreasePierce();
-            TakeDamage();
-        }
-        else if (other.transform.tag == "Player")
-        {
-            other.transform.GetComponent<Player>().ReduceHealth();
-            KillEnemy();
-        }
-    }
-
     // When creating enemies, use this function to set their speed and health
+    // Input newID: The enemy's ID/type number
+    // Input newHealth: The enemy's health
     public void CreateEnemySettings(int newID, int newHealth)
     {
         enemyID = newID;
         baseSpeed = GameObject.Find("Enemy Controller").GetComponent<EnemySpawner>().speedMultiplier * 2;
-        finalSpeed = baseSpeed - typeSpeedReduction * (newID - 1);
+        finalSpeed = baseSpeed - typeSpeedReduction * newID;
         finalSpeedStorage = finalSpeed;
         UpdateHealth(newHealth);
     }
@@ -87,15 +58,15 @@ public class Enemy : MonoBehaviour
                 break;
         }
     }
-    
-    // Depending on enemy type, either damage enemy normally or split it. If at 1 health, will instead kill enemy
+
+    // Depending on enemy type, either damage enemy normally or split it. If at 1 health or less, will instead kill enemy
     void TakeDamage()
     {
-        if (enemyID > 1 && health > 1)
+        if (enemyID > 0 && health > 1)
         {
             SplitEnemy();
         }
-        else if (enemyID == 1 && health > 1)
+        else if (enemyID == 0 && health > 1)
         {
             UpdateHealth(health - 1);
             StartCoroutine(Knockback());
@@ -106,7 +77,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // Create two enemies and send them back at random angles. Then kill current enemy.
+    // Create two enemies and send them back at specific random angles. Then kill current enemy.
     void SplitEnemy()
     {
         float randomAngle = 0;
@@ -116,6 +87,8 @@ public class Enemy : MonoBehaviour
         for (int n = 0; n < splitEnemyCount; n++)
         {
             newSplitEnemy = Instantiate(enemySplitup, transform.position, transform.rotation) as GameObject;
+
+            // To exaggerate split, splitArcSide is used to remove the middle sector when randomising split
             switch (splitArcSide)
             {
                 case 1:
@@ -127,19 +100,21 @@ public class Enemy : MonoBehaviour
             }
             splitArcSide *= -1;
             newSplitEnemy.transform.Rotate(0, 0, randomAngle);
+
+            // Apply attributes
             newSplitEnemy.GetComponent<Enemy>().CreateEnemySettings(enemyID - 1, health - 1);
             newSplitEnemy.GetComponent<Enemy>().SplitEnemyKnockback();
         }
         StartCoroutine(KillEnemy());
     }
 
-    // Starts Knockback coroutine
+    // Starts Knockback coroutine. Only here so that coroutine can be executed on new enemy
     public void SplitEnemyKnockback()
     {
         StartCoroutine(Knockback());
     }
 
-    // Send enemy backwards for kbDuration seconds, find player at center, and then reorient
+    // Send enemy backwards for kbDuration seconds, and then reorient towards the center
     IEnumerator Knockback()
     {
         float[] newPolarCoOrds;
@@ -171,5 +146,38 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(deathParticle.main.duration);
         Destroy(gameObject);
         yield return null;
+    }
+
+
+    // Update is called once per frame
+    void Update()
+    {
+        gameObject.transform.Translate(new Vector3(0, finalSpeed * Time.deltaTime, 0));
+        if (pierceCounter < pierceCooldown)
+        {
+            pierceCounter += Time.deltaTime;
+        }
+    }
+
+    // Take damage whenever colliding with projectile. If piercing, also reset the pierce immunity.
+    // If collision with player instead, rreduce player's health and kill enemy
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.transform.tag == "Projectile")
+        {
+            other.transform.GetComponent<Projectile>().DecreasePierce();
+            TakeDamage();
+        }
+        else if (other.transform.tag == "Piercing Proj" && pierceCounter >= pierceCooldown)
+        {
+            pierceCounter = 0;
+            other.transform.GetComponent<Projectile>().DecreasePierce();
+            TakeDamage();
+        }
+        else if (other.transform.tag == "Player")
+        {
+            other.transform.GetComponent<Player>().ReduceHealth();
+            KillEnemy();
+        }
     }
 }
