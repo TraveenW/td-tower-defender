@@ -8,11 +8,7 @@ public class Player : MonoBehaviour
     [SerializeField] float hitTimer = 1;
     [SerializeField] float baseFiringCD = 0.35f;
     [SerializeField] float weaponSwapCD = 0.1f;
-
-    [Header("Weapons")]
-    [SerializeField] GameObject shortbow;
-    [SerializeField] GameObject crossbow;
-    [SerializeField] GameObject launcher;
+    [SerializeField] GameObject[] weapons;
 
     [Header("Projectile")]
     [SerializeField] GameObject projectile;
@@ -24,8 +20,7 @@ public class Player : MonoBehaviour
     float fireRateCounter;
     bool hasDied;
     float hitCounter;
-    GameObject[] weaponObjectList;
-    Weapon[] weaponClassList;
+    List<Weapon> weaponClassList;
     Vector3 mousePos;
 
     // Start is called before the first frame update
@@ -35,13 +30,12 @@ public class Player : MonoBehaviour
         fireRateCounter = 0;
         hasDied = false;
         hitCounter = 0;
-        weaponObjectList = new GameObject[] { shortbow, crossbow, launcher };
-        weaponClassList = new Weapon[] { shortbow.GetComponent<Weapon>(), crossbow.GetComponent<Weapon>(), launcher.GetComponent<Weapon>() }; 
         
         // Hide all weapons before showing just the first
-        foreach (GameObject g in weaponObjectList)
+        foreach (GameObject w in weapons)
         {
-            g.SetActive(false);
+            weaponClassList.Add(w.GetComponent<Weapon>());
+            w.SetActive(false);
         }
         SwitchWeapon(weaponChoice);
     }
@@ -49,18 +43,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Mouse movement
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePos - transform.position);
-        if (fireRateCounter < weaponClassList[weaponChoice].firingMultiplier * baseFiringCD)
-        {
-            fireRateCounter += Time.deltaTime;
-        }
-        if (hitCounter < hitTimer)
-        {
-            hitCounter += Time.deltaTime;
-        }
 
-        // Implementing controls
+        // Mouse inputs
         if (Input.GetMouseButton(0) && fireRateCounter >= weaponClassList[weaponChoice].firingMultiplier * baseFiringCD)
         {
             fireRateCounter = 0;
@@ -71,15 +58,18 @@ public class Player : MonoBehaviour
             fireRateCounter = 0;
             SwitchWeapon(weaponChoice + 1);
         }
+
+            fireRateCounter += Time.deltaTime;
+            hitCounter += Time.deltaTime;
     }
 
     // Change weapons to next one in weaponClassList 
     // Input: Index of new weapon in list
     void SwitchWeapon(int newWeapon)
     {
-        weaponObjectList[weaponChoice].SetActive(false);
-        weaponChoice = newWeapon % weaponObjectList.Length;
-        weaponObjectList[weaponChoice].SetActive(true);
+        weapons[weaponChoice].SetActive(false);
+        weaponChoice = newWeapon % weapons.Length;
+        weapons[weaponChoice].SetActive(true);
     }
 
     // Fire weapon, with differing behaviour if the weapon is multishot

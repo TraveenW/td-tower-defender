@@ -4879,10 +4879,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8948575487930400294}
-  - component: {fileID: 970681065287413573}
-  - component: {fileID: 3983082191156421158}
   - component: {fileID: 3272837283362086115}
   - component: {fileID: 8421348600739686985}
+  - component: {fileID: 970681065287413573}
+  - component: {fileID: 3983082191156421158}
   - component: {fileID: 7145318603488727285}
   m_Layer: 0
   m_Name: Enemy Triangle
@@ -4907,6 +4907,38 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3272837283362086115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6547840778274154404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 342f529ae7c225644904f38f14babbd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyID: 0
+  speed: 2
+  kbDuration: 0.15
+  kbMultiplier: 15
+  splitArcHalf: 30
+  splitEnemyCount: 2
+  enemySplitup: {fileID: 0}
+--- !u!114 &8421348600739686985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6547840778274154404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6891fca80f8036c4796d4309c0ddff13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  despawnRange: 40
 --- !u!212 &970681065287413573
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4987,37 +5019,6 @@ PolygonCollider2D:
     - - {x: 0, y: 0.5773587}
       - {x: -0.5, y: -0.28866667}
       - {x: 0.5, y: -0.28866667}
---- !u!114 &3272837283362086115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6547840778274154404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 342f529ae7c225644904f38f14babbd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyID: 0
-  kbDuration: 0.15
-  kbMultiplier: 15
-  splitArcHalf: 30
-  splitEnemyCount: 2
-  enemySplitup: {fileID: 0}
---- !u!114 &8421348600739686985
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6547840778274154404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6891fca80f8036c4796d4309c0ddff13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  despawnRange: 40
 --- !u!50 &7145318603488727285
 Rigidbody2D:
   serializedVersion: 4

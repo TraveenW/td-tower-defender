@@ -13,8 +13,8 @@ public class DifficultyButton : MonoBehaviour
     public void StartGame()
     {
         EnemyController.SetActive(true);
-        EnemyController.GetComponent<EnemySpawner>().spawnRateMultiplier = difficultyMultiplier;
-        EnemyController.GetComponent<EnemySpawner>().speedMultiplier = difficultyMultiplier;
+        EnemyController.GetComponent<EnemySpawner>().spawnRateMultiplier *= difficultyMultiplier;
+        EnemyController.GetComponent<EnemySpawner>().speedMultiplier *= difficultyMultiplier;
         GameDisplay.SetActive(true);
 
         transform.parent.gameObject.SetActive(false);

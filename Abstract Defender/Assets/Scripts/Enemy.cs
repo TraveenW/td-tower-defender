@@ -4,40 +4,38 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] int enemyID = 0;
-    [SerializeField] float kbDuration = 0.02f;
-    [SerializeField] float kbMultiplier = 5;
-    [SerializeField] float splitArcHalf = 50f;
-    [SerializeField] int splitEnemyCount = 2;
-    [SerializeField] GameObject enemySplitup;
+    [SerializeField] int enemyID;
+    [SerializeField] float speed;
 
-    float baseSpeed; 
-    float typeSpeedReduction = 0.2f;
-    
-    float pierceCooldown = 1;
+    [Header("Knockback")]
+    [SerializeField] float kbDuration;
+    [SerializeField] float kbMultiplier;
+
+    [Header("Splitting")]
+    [SerializeField] float splitArcHalf;
+    [SerializeField] int splitEnemyCount;
+    [SerializeField] GameObject enemySplitup;
     
     int health = 1;
-    float finalSpeed = 2;
-    float finalSpeedStorage;
+    float pierceCooldown = 1;
 
     float pierceCounter = 0;
     float hitCounter = 0;
+    float speedStorage;
 
     // When creating enemies, use this function to set their speed and health
-    // Input newID: The enemy's ID/type number
     // Input newHealth: The enemy's health
     public void CreateEnemySettings(int newHealth)
     {
-        baseSpeed = GameObject.Find("Enemy Controller").GetComponent<EnemySpawner>().speedMultiplier * 2;
-        finalSpeed = baseSpeed - typeSpeedReduction * enemyID;
-        finalSpeedStorage = finalSpeed;
+        speed *= GameObject.Find("Enemy Controller").GetComponent<EnemySpawner>().speedMultiplier;
+        speedStorage = speed;
         UpdateHealth(newHealth);
     }
 
     // Update is called once per frame
     void Update()
     {
-        gameObject.transform.Translate(new Vector3(0, finalSpeed * Time.deltaTime, 0));
+        gameObject.transform.Translate(new Vector3(0, speed * Time.deltaTime, 0));
         pierceCounter += Time.deltaTime;
         hitCounter += Time.deltaTime;
     }
@@ -67,11 +65,12 @@ public class Enemy : MonoBehaviour
     }
 
     // Changes the sprite color according to health
-    void UpdateHealth(int nextHealth)
+    // Input: The new health to change to
+    void UpdateHealth(int newHealth)
     {
         SpriteRenderer sr = gameObject.GetComponent<SpriteRenderer>();
 
-        health = nextHealth;
+        health = newHealth;
         switch (health)
         {
             case 0:
@@ -149,18 +148,20 @@ public class Enemy : MonoBehaviour
 
 
     // Send enemy backwards for kbDuration seconds, and then reorient towards the center
+    // Input duration: How long knockback will go for
+    // Input speedMultiplier: Multiply its regular speed when knocked back
     IEnumerator Knockback(float duration, float speedMultiplier)
     {
         float[] newPolarCoOrds;
 
         // Reverse finalSpeed and multiply its magnitude
-        finalSpeed -= speedMultiplier * finalSpeedStorage;
+        speed -= speedMultiplier * speedStorage;
         yield return new WaitForSeconds(duration);
 
         // Reorient enemy and reset finalSpeed
         newPolarCoOrds = CartesianAndPolar.ConvertToPolar(transform.position.x, transform.position.y);
         transform.eulerAngles = new Vector3(0, 0, newPolarCoOrds[1] + 90f);
-        finalSpeed = finalSpeedStorage;
+        speed = speedStorage;
         yield return null;
     }
 
@@ -170,7 +171,7 @@ public class Enemy : MonoBehaviour
         ParticleSystem deathParticle = transform.GetChild(0).GetComponent<ParticleSystem>();
         var particleSettings = deathParticle.main;
 
-        finalSpeed = 0;
+        speed = 0;
         gameObject.GetComponent<Collider2D>().enabled = false;
         particleSettings.startColor = gameObject.GetComponent<SpriteRenderer>().color;
         UpdateHealth(0);

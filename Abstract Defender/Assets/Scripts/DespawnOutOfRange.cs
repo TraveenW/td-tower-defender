@@ -7,6 +7,7 @@ public class DespawnOutOfRange : MonoBehaviour
     public float despawnRange = 40;
     float[] distanceFromCenter;
 
+    // Destroy object if they are a specific distance from the center
     void Update()
     {
         distanceFromCenter = CartesianAndPolar.ConvertToPolar(gameObject.transform.position.x, gameObject.transform.position.y);
