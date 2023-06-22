@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public float firingMultiplier;
+    public float firingCooldown;
     public int pierce;
     public float shotDistance;
 

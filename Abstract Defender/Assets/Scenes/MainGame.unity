@@ -1496,7 +1496,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45da32ac863caac47a16ef86746fb7bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firingMultiplier: 1
+  firingCooldown: 0.37
   pierce: 1
   shotDistance: 40
   isMultishot: 0
@@ -2475,8 +2475,8 @@ Transform:
   m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 394789706}
   - {fileID: 130330037}
+  - {fileID: 394789706}
   - {fileID: 1796134906}
   m_Father: {fileID: 700733466}
   m_RootOrder: 0
@@ -2495,12 +2495,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 1
   hitTimer: 1
-  baseFiringCD: 0.2
   weaponSwapCD: 0.1
   weapons:
-  - {fileID: 3178150055063102538, guid: d560fd0b569d75e44b2a6f3075fa24ca, type: 3}
-  - {fileID: 801719912522615117, guid: 36687343bc0e48349b6a0e0785552f8d, type: 3}
-  - {fileID: 6822517954439498635, guid: 586eaef7ac1547847a93df6402c8b7db, type: 3}
+  - {fileID: 432649816}
+  - {fileID: 1781110561}
+  - {fileID: 1095034692}
   projectile: {fileID: 6442159227910233417, guid: cc5b1438719c70942bce299327d046d9, type: 3}
   gameOver: {fileID: 668785747}
 --- !u!58 &709227861
@@ -3002,6 +3001,7 @@ MonoBehaviour:
   speedMultiplier: 2
   freeplayRampupMultiplier: 0.01
   spawnRadius: 34
+  timerObject: {fileID: 1687583123}
   enemyHealthTypes: 4
   enemyList:
   - {fileID: 6547840778274154404, guid: 2b9880487777ade449b7e6c8cd9e1c0b, type: 3}
@@ -3712,7 +3712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45da32ac863caac47a16ef86746fb7bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firingMultiplier: 2
+  firingCooldown: 0.67
   pierce: 5
   shotDistance: 40
   isMultishot: 0
@@ -3735,7 +3735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45da32ac863caac47a16ef86746fb7bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firingMultiplier: 3
+  firingCooldown: 1
   pierce: 1
   shotDistance: 16
   isMultishot: 1
@@ -4050,9 +4050,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crossbow
       objectReference: {fileID: 0}
+    - target: {fileID: 801719912522615117, guid: 36687343bc0e48349b6a0e0785552f8d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5158045516611123035, guid: 36687343bc0e48349b6a0e0785552f8d, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5158045516611123035, guid: 36687343bc0e48349b6a0e0785552f8d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4107,9 +4111,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shortbow
       objectReference: {fileID: 0}
+    - target: {fileID: 3178150055063102538, guid: d560fd0b569d75e44b2a6f3075fa24ca, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8397672449489641845, guid: d560fd0b569d75e44b2a6f3075fa24ca, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8397672449489641845, guid: d560fd0b569d75e44b2a6f3075fa24ca, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4163,6 +4171,10 @@ PrefabInstance:
     - target: {fileID: 6822517954439498635, guid: 586eaef7ac1547847a93df6402c8b7db, type: 3}
       propertyPath: m_Name
       value: Shrapnel Launcher
+      objectReference: {fileID: 0}
+    - target: {fileID: 6822517954439498635, guid: 586eaef7ac1547847a93df6402c8b7db, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6971182751194770237, guid: 586eaef7ac1547847a93df6402c8b7db, type: 3}
       propertyPath: m_RootOrder

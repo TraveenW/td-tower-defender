@@ -21,14 +21,14 @@ public class Enemy : MonoBehaviour
 
     float pierceCounter = 0;
     float hitCounter = 0;
-    float speedStorage;
+    float speedStored;
 
     // When creating enemies, use this function to set their speed and health
     // Input newHealth: The enemy's health
     public void CreateEnemySettings(int newHealth)
     {
         speed *= GameObject.Find("Enemy Controller").GetComponent<EnemySpawner>().speedMultiplier;
-        speedStorage = speed;
+        speedStored = speed;
         UpdateHealth(newHealth);
     }
 
@@ -114,12 +114,9 @@ public class Enemy : MonoBehaviour
     {
         float randomAngle = 0;
         int splitArcSide = 1;
-        GameObject newSplitEnemy;
 
         for (int n = 0; n < splitEnemyCount; n++)
         {
-            newSplitEnemy = Instantiate(enemySplitup, transform.position, transform.rotation) as GameObject;
-
             // To exaggerate split, splitArcSide is used to remove the middle sector when randomising split
             switch (splitArcSide)
             {
@@ -131,11 +128,12 @@ public class Enemy : MonoBehaviour
                     break;
             }
             splitArcSide *= -1;
-            newSplitEnemy.transform.Rotate(0, 0, randomAngle);
 
-            // Apply attributes
-            newSplitEnemy.GetComponent<Enemy>().CreateEnemySettings(health - 1);
-            newSplitEnemy.GetComponent<Enemy>().SplitEnemyKnockback(kbDuration);
+            // Create new enemy and apply attributes
+            GameObject newEnemy = Instantiate(enemySplitup, transform.position, transform.rotation) as GameObject;
+            newEnemy.transform.Rotate(0, 0, randomAngle);
+            newEnemy.GetComponent<Enemy>().CreateEnemySettings(health - 1);
+            newEnemy.GetComponent<Enemy>().SplitEnemyKnockback(kbDuration);
         }
         StartCoroutine(KillEnemy());
     }
@@ -155,13 +153,13 @@ public class Enemy : MonoBehaviour
         float[] newPolarCoOrds;
 
         // Reverse finalSpeed and multiply its magnitude
-        speed -= speedMultiplier * speedStorage;
+        speed -= speedMultiplier * speedStored;
         yield return new WaitForSeconds(duration);
 
         // Reorient enemy and reset finalSpeed
         newPolarCoOrds = CartesianAndPolar.ConvertToPolar(transform.position.x, transform.position.y);
         transform.eulerAngles = new Vector3(0, 0, newPolarCoOrds[1] + 90f);
-        speed = speedStorage;
+        speed = speedStored;
         yield return null;
     }
 

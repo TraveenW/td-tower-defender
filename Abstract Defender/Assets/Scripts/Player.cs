@@ -6,7 +6,6 @@ public class Player : MonoBehaviour
 {
     public int health = 1;
     [SerializeField] float hitTimer = 1;
-    [SerializeField] float baseFiringCD = 0.35f;
     [SerializeField] float weaponSwapCD = 0.1f;
     [SerializeField] GameObject[] weapons;
 
@@ -30,7 +29,8 @@ public class Player : MonoBehaviour
         fireRateCounter = 0;
         hasDied = false;
         hitCounter = 0;
-        
+        weaponClassList = new List<Weapon>();
+
         // Hide all weapons before showing just the first
         foreach (GameObject w in weapons)
         {
@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePos - transform.position);
 
         // Mouse inputs
-        if (Input.GetMouseButton(0) && fireRateCounter >= weaponClassList[weaponChoice].firingMultiplier * baseFiringCD)
+        if (Input.GetMouseButton(0) && fireRateCounter >= weaponClassList[weaponChoice].firingCooldown)
         {
             fireRateCounter = 0;
             FireWeapon();

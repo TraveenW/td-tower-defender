@@ -9,6 +9,7 @@ public class EnemySpawner : MonoBehaviour
     public float speedMultiplier = 1f;
     [SerializeField] float freeplayRampupMultiplier = 0.01f;
     [SerializeField] float spawnRadius = 18;
+    [SerializeField] GameObject timerObject;
 
     [Header("Enemy Types")]
     [SerializeField] int enemyHealthTypes = 4;
@@ -28,7 +29,7 @@ public class EnemySpawner : MonoBehaviour
         maxWaveNumber = WaveArray.waveArray.GetLength(0);
         currentWave = new float[WaveArray.waveArray.GetLength(1)];
         UpdateCurrentWave(WaveArray.waveArray, 0);
-        gameTimer = GameObject.FindObjectOfType<TimerSystem>();
+        gameTimer = timerObject.GetComponent<TimerSystem>();
     }
 
     // Update is called once per frame
@@ -76,7 +77,6 @@ public class EnemySpawner : MonoBehaviour
         int enemyHealth;
         int enemyTypeID;
         float[] enemyCoOrds;
-        GameObject enemyType = enemyList[0];
 
         // Randomly choose an enemy allowed to spawn
         while (!isEnemyChosen)
@@ -92,13 +92,9 @@ public class EnemySpawner : MonoBehaviour
         enemyHealth = 1 + (randomEnemy % enemyHealthTypes);
         enemyTypeID = Mathf.FloorToInt(randomEnemy / enemyHealthTypes);
         enemyCoOrds = CartesianAndPolar.ConvertToCartesian(spawnRadius, spawnAngle);
-        if (enemyTypeID < enemyList.Length)
-        {
-            enemyType = enemyList[enemyTypeID];
-        }
-
+ 
         // Spawn enemy and apply attributes
-        GameObject newEnemy = Instantiate(enemyType, new Vector3(enemyCoOrds[0], enemyCoOrds[1], 0), Quaternion.identity) as GameObject;
+        GameObject newEnemy = Instantiate(enemyList[enemyTypeID], new Vector3(enemyCoOrds[0], enemyCoOrds[1], 0), Quaternion.identity) as GameObject;
         newEnemy.transform.Rotate(0, 0, spawnAngle + 90f, Space.Self);
         newEnemy.GetComponent<Enemy>().CreateEnemySettings(enemyHealth);
     }
